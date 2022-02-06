@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/bg_place"/>
+        android:src="@drawable/bg_place"
+        android:contentDescription="@string/search_empty_background_image" />
 
     <FrameLayout
         android:id="@+id/actionBarLayout"
@@ -27,9 +28,11 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:hint="输入地址"
+            android:hint="@string/textInput_detail"
             android:imeOptions="actionSearch"
-            android:background="@drawable/search_bg"/>
+            android:background="@drawable/search_bg"
+            android:autofillHints="AUTOFILL_HINT_POSTAL_ADDRESS"
+            android:inputType="textPostalAddress" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
