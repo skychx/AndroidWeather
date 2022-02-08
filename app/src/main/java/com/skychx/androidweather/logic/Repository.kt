@@ -21,6 +21,7 @@ object Repository {
     }
 
     fun refreshWeather(lng: String, lat: String, placeName: String) = fire(Dispatchers.IO) {
+        // 使用 coroutineScope 函数创建了一个协程作用域
         coroutineScope {
             val deferredRealtime = async {
                 WeatherNetwork.getRealtimeWeather(lng, lat)
