@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/weatherLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:overScrollMode="never"
+    android:visibility="invisible">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- https://stackoverflow.com/questions/32947440/android-data-binding-using-include-tag -->
+        <include android:id="@+id/weatherNow" layout="@layout/now" />
+
+        <include android:id="@+id/weatherForecast"  layout="@layout/forecast" />
+
+        <include android:id="@+id/weatherLife"  layout="@layout/life_index" />
+
+    </LinearLayout>
+
+</ScrollView>
