@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/weatherLayout"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:overScrollMode="never"
-    android:visibility="invisible">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <!--主屏幕内容-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <!-- https://stackoverflow.com/questions/32947440/android-data-binding-using-include-tag -->
-        <include android:id="@+id/weatherNow" layout="@layout/now" />
+        <ScrollView
+            android:id="@+id/weatherLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:visibility="invisible">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <include android:id="@+id/weatherForecast"  layout="@layout/forecast" />
+                <include android:id="@+id/weatherNow" layout="@layout/now" />
+                <include android:id="@+id/weatherForecast" layout="@layout/forecast" />
+                <include android:id="@+id/weatherLife" layout="@layout/life_index" />
 
-        <include android:id="@+id/weatherLife"  layout="@layout/life_index" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </LinearLayout>
+    <!--滑动菜单内容-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/teal_700">
 
-</ScrollView>
+        <fragment
+            android:id="@+id/placeFragment"
+            android:name="com.skychx.androidweather.ui.place.PlaceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"/>
+
+    </FrameLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

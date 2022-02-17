@@ -1,6 +1,7 @@
 package com.skychx.androidweather.logic
 
 import androidx.lifecycle.liveData
+import com.skychx.androidweather.logic.dao.PlaceDao
 import com.skychx.androidweather.logic.model.Place
 import com.skychx.androidweather.logic.model.Weather
 import com.skychx.androidweather.logic.network.WeatherNetwork
@@ -47,6 +48,12 @@ object Repository {
             }
         }
     }
+
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    fun getSavedPlace() = PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved() = PlaceDao.isPlaceSaved()
 
     private fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
         liveData<Result<T>>(context) {

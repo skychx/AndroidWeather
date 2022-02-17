@@ -1,17 +1,19 @@
 package com.skychx.androidweather.ui.weather
 
-import android.graphics.Color
-import android.os.Build
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.skychx.androidweather.R
@@ -22,8 +24,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
-    private val viewModel by lazy { ViewModelProvider(this).get(WeatherViewModel::class.java) }
-    private lateinit var binding: ActivityWeatherBinding
+    val viewModel by lazy { ViewModelProvider(this).get(WeatherViewModel::class.java) }
+    lateinit var binding: ActivityWeatherBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,38 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         fetchData()
+
+        onClickListers()
+    }
+
+    fun refreshWeather() {
+        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        binding.swipeRefresh.isRefreshing = true
+    }
+
+    private fun onClickListers() {
+        // 打开滑动菜单
+        binding.weatherNow.navBtn.setOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+            // 滑动菜单隐藏时隐藏软键盘
+            override fun onDrawerClosed(drawerView: View) {
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        })
+
+        binding.swipeRefresh.setOnRefreshListener {
+            refreshWeather()
+        }
     }
 
     private fun hideSystemBars() {
@@ -70,10 +104,12 @@ class WeatherActivity : AppCompatActivity() {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
+
+            binding.swipeRefresh.isRefreshing = false
         })
 
         // 刷新天气
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        refreshWeather()
     }
 
     private fun showWeatherInfo(weather: Weather) {
@@ -140,4 +176,5 @@ class WeatherActivity : AppCompatActivity() {
         // 数据全部准备妥当后显示 scrollview
         binding.weatherLayout.visibility = View.VISIBLE
     }
+
 }
